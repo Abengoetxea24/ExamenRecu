@@ -2,11 +2,13 @@ package dibujo;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.io.IOException;
 import java.util.Scanner;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import java.util.logging.*;
 
 import base.Poligono; 
 
@@ -51,6 +53,7 @@ public class Dibujar extends JPanel {
     }
 
     public static void main(String[] args) {
+    	
         Scanner scanner = new Scanner(System.in);
         System.out.print("Introduce un nombre para el pol�gono: ");
         String nombre = scanner.next();
@@ -60,6 +63,15 @@ public class Dibujar extends JPanel {
         int lados = scanner.nextInt();
         poligono.setLados(lados);
         scanner.close();
+        
+        Logger logger = Logger.getLogger("DibujarLog");
+        FileHandler filehandler;
+        try {
+        	filehandler = new FileHandler(nombre+"_log.txt");
+        	logger.addHandler(filehandler);
+        } catch (IOException e){
+        	logger.log(Level.SEVERE,"error al configurar el archivo de registro", e);
+        }
 
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Regular Polygon Drawer");
